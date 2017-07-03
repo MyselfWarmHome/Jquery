@@ -1,0 +1,157 @@
+1.onclick是绑定的事件(它是一个事件)，注意该事件绑定只是JacaScript中有，Jquery中并没有此事件，告诉浏览器在鼠标点击时候要做什么
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="GBK">
+		<title>测试onclick事件</title>
+		<script type="text/javascript">
+			function mouse(){
+				alert('我是一张图片!!!');
+			}
+		</script>
+	</head>
+	<body>
+		<img src="../1.jpg" alt="图片" onclick="mouse()"/>
+	</body>
+</html>
+
+2.click方法(jquery中的)作用是触发onclick事件，只要执行了元素的click()方法，就会触发onclick事件。
+click()方法的主要作用是触发调用click方法元素onclick事件,实际上是模拟了鼠标的点击动作。此外，如果在click括号内定义了其他可执行语句，则click方法会在执行完onclick事件之后执行括号内部的语句。
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title>测试Jquery中的click方法(表单选择器)</title>
+ <!--   引入jQuery -->
+ <script src="../js/jquery-1.11.0.min.js"></script>
+ <script src="../js/assist.js"></script>
+ <link rel="stylesheet" type="text/css" href="../css/style.css" /> 
+ <script type="text/javascript">
+ 	$(function(){
+ 		$("#btn1").click(function(){
+ 			//alert($("#form1 :input").size());
+ 			//alert($("#form1 :input").length);
+ 			alert($("#form1 input").size());
+ 		});
+ 	});
+ </script>
+</head>
+<body>
+  <input type="button" value="选取所有的表单子元素" id="btn1"/><br />
+	
+  <form id="form1" action="#">
+    <input type="button" value="Button"/><br/>
+    <input type="checkbox" name="c"/>1<input type="checkbox" name="c"/>2<input type="checkbox" name="c"/>3<br/>
+    <input type="file" /><br/>
+    <input type="hidden" /><br/>
+    <input type="image" src="1.jpg"/><br/>
+    <input type="password" /><br/>
+    <input type="radio" name="a"/>1<input type="radio" name="a"/>2<br/>
+    <input type="reset" /><br/>
+    <input type="submit" value="提交"/><br/>
+    <input type="text" /><br/>
+    <select><option>Option</option></select><br/>
+    <textarea rows="5" cols="20"></textarea><br/>
+    <button>Button</button><br/>
+  </form>
+  <div></div>
+</body>
+</html>
+
+3.on方法（jQuery中的),on()方法绑定事件处理程序到当前选定的jQuery对象中的元素。在jQuery 1.7中，.on()方法提供绑定事件处理程序所需的所有功能。(动态绑定事件处理函数)
+该方法的参数有两种(参数中带中括号的参数可有可无，根据实际的需求去选择)
+1).on(events,[selector],[data],fn)
+events:一个或多个用空格分隔的事件类型和可选的命名空间，如"click"或"keydown.myPlugin" 。
+selector:一个选择器字符串用于过滤器的触发事件的选择器元素的后代。如果选择的< null或省略，当它到达选定的元素，事件总是触发。
+data:当一个事件被触发时要传递event.data给事件处理函数。
+fn:该事件被触发时执行的函数。 false 值也可以做一个函数的简写，返回false。
+2).on(events-map,[selector],[data])
+events-map:个用字符串表示的，一个或多个空格分隔的事件类型和可选的命名空间，值表示事件绑定的处理函数。
+selector:一个选择器字符串过滤选定的元素，该选择器的后裔元素将调用处理程序。如果选择是空或被忽略，当它到达选定的元素，事件总是触发。
+data:当一个事件被触发时要传递event.data给事件处理函数。
+on方法是为匹配选择器的元素(现在匹配或者将来匹配)定义事件的处理函数
+动态绑定事件处理的方法有bind方法和on方法,为什么在jQuery中要加入on方法呢?（现在匹配和将来匹配什么意思呢？）
+举个例子:
+bind函数的应用例子:
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="GBK">
+		<title>测试bind方法</title>
+		<script src="../js/jquery-1.11.0.min.js"></script>
+		<script type="text/javascript">
+			$(funnction(){
+				$("img").bind({
+					mouseenter: function(){
+						$(this).css("border","thick solid red");
+					}
+					mouseout: function(){
+						$(this).css("border","");
+					}
+				});
+				
+				$("#row").append("<div class='dcell' />")
+				.append("<img src=''lily.png />")
+				.append("<label for='lily'>Lily:</label>")
+				.append("<input name='lily' value='0' required />");
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div id="row">
+			<img  src="../1.jpg"/>我是图片一
+			<hr />
+			<img  src="../2.jpg"/>我是图片二
+			<hr />
+		</div>
+	</body>
+</html>
+
+在上面的jquery部分的代码中，使用bind函数为所有的img元素绑定了mouseenter和mouseout事件的处理函数，使用append方法向页面的div标签中加
+入了几个新元素，包括了一个img元素。此时注意在页面加载解析时，此img元素并并不存在在，故我的事件处理函数不会绑定到这个新的元素上面，
+结果页面只有图片一和图片二在鼠标移到图片上时会显示边框，新的img元素不会有边框。
+在上面这种情况下，如果想解决也可以，那就是在新的img元素加载之后再调用一次bind方法也可以解决，但要在动态添加事件时弄清每个不同类型元
+素要有哪些事件处理函数比较麻烦。
+
+所以才有on方法的诞生
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="GBK">
+		<title>测试on方法</title>
+		<script src="../js/jquery-1.11.0.min.js"></script>
+		<script type="text/javascript">
+			$(funnction(){
+				$(document).on({
+					mouseenter: function(){
+						$(this).css("border","thick solid red");
+					}
+					mouseout: function(){
+						$(this).css("border","");
+					}
+				},"img");
+				
+				$("#row").append("<div class='dcell' />")
+				.append("<img src=''lily.png />")
+				.append("<label for='lily'>Lily:</label>")
+				.append("<input name='lily' value='0' required />");
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div id="row">
+			<img  src="../1.jpg"/>我是图片一
+			<hr />
+			<img  src="../2.jpg"/>我是图片二
+			<hr />
+		</div>
+	</body>
+</html>
+注意：上面使用$(document)对象调用on方法，这样才能保证DOM内的任意位置的img元素都能绑定到我指定的事件处理函数。
+可以这么去理解:可以把on方法想象成它努力地把事件处理函数添加到新元素上。
+
+jquery中click,js中的onclick与jquery中使用on方法的区别:其实就是on方法中的方法可以去动态的绑定事件处理，而jquery中的click和js中的onclick不能去绑定动态的事件处理，只能去处理静态的事件处理。
